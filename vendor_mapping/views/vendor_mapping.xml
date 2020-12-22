@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vendor_mapping_search_view" model="ir.ui.view">
+            <field name="name">vendor.mapping.search</field>
+            <field name="model">vendor.mapping</field>
+            <field name="arch" type="xml">
+                <search string="Vendor Mapping">
+                    <field name="vendor"/>
+                    <field name="vendor_api_ref"/>
+                    <field name="odoo_api_model_ref"/>
+                    <field name="odoo_api_field_ref"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="vendor_mapping_list_view" model="ir.ui.view">
+            <field name="name">vendor.mapping.list</field>
+            <field name="model">vendor.mapping</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Mapping" editable="bottom">
+                    <field name="vendor"/>
+                    <field name="vendor_api_ref"/>
+                    <field name="odoo_api_model_ref"/>
+                    <field name="odoo_api_field_ref"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="vendor_mapping_action_form" model="ir.actions.act_window">
+            <field name="name">Vendor Mapping</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vendor.mapping</field>
+            <field name="search_view_id" ref="vendor_mapping_search_view"/>
+            <field name="view_id" ref="vendor_mapping_list_view"/>
+        </record>
+
+        <menuitem  name="Vendor Mapping"
+                   id="menu_vendor_mapping"
+                   parent="sale.menu_sale_config"/>
+        <menuitem   name="Vendor Mapping"
+                    id="menu_vendor_mapping_child"
+                    action="vendor_mapping_action_form"
+                    parent="menu_vendor_mapping" sequence="1" />
+
+    </data>
+</odoo>

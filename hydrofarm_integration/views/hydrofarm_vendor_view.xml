@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="hydrofarm_vendor_tree_view">
+            <field name="name">hydrofarm.vendor.tree</field>
+            <field name="model">hydrofarm.vendor</field>
+            <field name="arch" type="xml">
+                <tree string="Vendors">
+                    <field name="name"/>
+                    <field name="partner"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Form view-->
+        <record id="hydrofarm_vendor_form_view" model="ir.ui.view">
+            <field name="name">hydrofarm.vendor.form</field>
+            <field name="model">hydrofarm.vendor</field>
+            <field name="arch" type="xml">
+                <form string="Vendors">
+                    <header>
+                        <button type="object" class="oe_highlight" string="Test Connection" name="test_connection"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="message" readonly="1"/>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="partner" domain="[('is_api_vendor', '=', True)]"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="authorization" string="General Authorisation">
+                                <group>
+                                    <group>
+                                       <field name="url"/>
+                                       <field name="client_id"/>
+                                       <field name="client_secret"/>
+                                       <field name="access_token_url"/>
+                                    </group>
+                                    <group>
+                                        <field name="active"/>
+
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                        <field name="activity_ids" widget="mail_activity"/>-->
+<!--                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>-->
+<!--                    </div>-->
+                </form>
+
+            </field>
+        </record>
+
+
+         <record model="ir.actions.act_window" id="action_hydrofarm_vendor">
+            <field name="name">Hydrofarm</field>
+            <field name="res_model">hydrofarm.vendor</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                  <p class="o_view_nocontent_smiling_face">
+                  </p><p>
+                  </p>
+             </field>
+        </record>
+
+        <menuitem id="menu_integration" name="HydroFarm"
+                  parent="sale.menu_sale_config" sequence="101"/>
+
+        <!-- Integration sub-menus -->
+        <menuitem id="menu_integration_distributor" name="HydroFarm"
+                  action="action_hydrofarm_vendor"
+                  parent="menu_integration" sequence="1"/>
+
+
+
+<!--        hydroform outputs views-->
+        <record model="ir.ui.view" id="hydrofarm_outputs_tree_view">
+            <field name="name">hydrofarm.outputs.tree</field>
+            <field name="model">hydrofarm.outputs</field>
+            <field name="arch" type="xml">
+                <tree string="Vendors">
+                    <field name="name"/>
+                    <field name="sku"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Form view-->
+        <record id="hydrofarm_outputs_form_view" model="ir.ui.view">
+            <field name="name">hydrofarm.outputs.form</field>
+            <field name="model">hydrofarm.outputs</field>
+            <field name="arch" type="xml">
+                <form string="Vendors">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="sku"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="activity_ids" widget="mail_activity"/>-->
+<!--                        <field name="message_ids" widget="mail_thread"/>-->
+<!--                    </div>-->
+                </form>
+
+            </field>
+        </record>
+
+
+         <record model="ir.actions.act_window" id="action_hydrofarm_outputs">
+            <field name="name">Hydrofarm Outputs</field>
+            <field name="res_model">hydrofarm.outputs</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                  <p class="o_view_nocontent_smiling_face">
+                  </p><p>
+                  </p>
+             </field>
+        </record>
+
+        <menuitem id="menu_integration_distributor_outputs" name="HydroFarm Outputs"
+                  action="action_hydrofarm_outputs"
+                  parent="menu_integration" sequence="1"/>
+
+        <act_window
+            id="act_applicants_reject"
+            name="Import Products"
+            res_model="import.data"
+            binding_model="hydrofarm.outputs"
+            view_mode="form"
+            target="new"
+            context="{
+                'default_fetched_ids': active_ids,
+            }"
+        />
+
+    </data>
+</odoo>

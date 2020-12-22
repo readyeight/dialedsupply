@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hydrofarm.vendor,access.hydrofarm.vendor,model_hydrofarm_vendor,,1,1,1,1
+
+access_fetch_data,fetch.data,model_fetch_data,,1,1,1,1
+access_import_data,import.data,model_import_data,,1,1,1,1
+
+
+access_hydrofarm_outputs,hydrofarm.outputs,model_hydrofarm_outputs,,1,1,1,1
+
