@@ -9,12 +9,15 @@
                         <group>
                             <separator string="Keyword"/>
                             <field name="keyword" nolabel="1"/>
+<!--                            <field name="page_size"/>-->
+<!--                            <field name="page_no"/>-->
                         </group>
                         <group>
                         </group>
                     </group>
                     <footer>
                         <button icon="fa-cogs" string="Fetch Data" name="fetch_data" type="object" class="oe_highlight"/>
+                        <button icon="fa-cogs" string="Fetch Products" name="fetch_products_data" type="object" class="oe_highlight"/>
                         <button string="Cancel" class="btn btn-secondary" special="cancel"/>
                     </footer>
                </form>

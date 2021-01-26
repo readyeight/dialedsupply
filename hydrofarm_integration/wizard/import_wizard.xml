@@ -32,6 +32,39 @@
             <field name="target">new</field>
         </record>
 
+
+    <record id="view_import_selected_data" model="ir.ui.view">
+            <field name="name">import.selected.data</field>
+            <field name="model">import.selected.data</field>
+            <field name="arch" type="xml">
+                <form string="Import Data">
+                    <group colspan="4" >
+                        <separator string="Outputs" colspan="4"/>
+                        <newline/>
+                        <field name="fetched_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="check_box"/>
+                                <field name="name" readonly="1"/>
+                                <field name="sku" readonly="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button icon="fa-cogs" string="Import Data" name="import_selected_data" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_view_import_selected_data" model="ir.actions.act_window">
+            <field name="name">Import Data</field>
+            <field name="res_model">import.selected.data</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_import_selected_data"/>
+            <field name="target">new</field>
+        </record>
+
 <!--        <record id="import_data_mapping_search_view" model="ir.ui.view">-->
 <!--            <field name="name">vimport.data.tree</field>-->
 <!--            <field name="model">hydrofarm.outputs</field>-->

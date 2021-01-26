@@ -7,3 +7,9 @@ access_import_data,import.data,model_import_data,,1,1,1,1
 
 access_hydrofarm_outputs,hydrofarm.outputs,model_hydrofarm_outputs,,1,1,1,1
 
+
+access_hydrofarm_categories,hydrofarm.categories,model_hydrofarm_categories,,1,1,1,1
+access_hydro_categorie,hydro.categorie,model_hydro_categorie,,1,1,1,1
+access_your_price,your.price,model_your_price,,1,1,1,1
+
+access_import_selected_data,import.selected.data,model_import_selected_data,,1,1,1,1
