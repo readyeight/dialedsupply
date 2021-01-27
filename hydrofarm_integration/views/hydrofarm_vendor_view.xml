@@ -19,6 +19,7 @@
                 <form string="Vendors">
                     <header>
                         <button type="object" class="oe_highlight" string="Test Connection" name="test_connection"/>
+                        <button type="object" class="oe_highlight" string="Fetch Products" name="get_products"/>
                     </header>
                     <sheet>
                         <group>
@@ -105,6 +106,68 @@
                                 <field name="sku"/>
                             </group>
                             <group>
+                                <field name="recid"/>
+                                <field name="namealias"/>
+                                <field name="categoryid"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="webdescription"/>
+                                <field name="unitsize"/>
+                                <field name="model"/>
+                                <field name="isdefault" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="isdiscontinued" invisible="1"/>
+                                <field name="isspecialorder" invisible="1"/>
+                                <field name="isbuildtoorder" invisible="1"/>
+                                <field name="isclearance" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="issale" invisible="1"/>
+                                <field name="ishazmat" invisible="1"/>
+                                <field name="freightrestricted" invisible="1"/>
+                                <field name="freightquoterequired" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="defaultuom" invisible="1"/>
+                                <field name="defaultuomrecid" invisible="1"/>
+                                <field name="defaultimageid" invisible="1"/>
+                                <field name="mixmatchgrp" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="warranty" invisible="1"/>
+                                <field name="trackingdimensiongroup" invisible="1"/>
+                                <field name="launchdate" invisible="1"/>
+                                <field name="salestartdate" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="saleenddate" invisible="1"/>
+                                <field name="modifiedon" invisible="1"/>
+                                <field name="createdon" invisible="1"/>
+                                <field name="image"/>
+                            </group>
+                            <group>
+                                <field name="height"/>
+                                <field name="width"/>
+                                <field name="depth"/>
+<!--                                <field name="wholesalePrice"/>-->
+                                <field name="dimensions"/>
+                                <field name="volume"/>
+                            </group>
+                            <group>
+                                <field name="keyword" invisible="1"/>
+                                <field name="page_size" invisible="1"/>
+                                <field name="page_no" invisible="1"/>
+                                <field name="retailPrice"/>
+                                <field name="yourPrice_ids">
+                                    <tree>
+                                        <field name="yourprice"/>
+                                        <field name="price"/>
+                                        <field name="qtyStart"/>
+                                        <field name="qtyEnd"/>
+                                    </tree>
+                                </field>
                             </group>
                         </group>
                     </sheet>
@@ -138,7 +201,7 @@
         <act_window
             id="act_applicants_reject"
             name="Import Products"
-            res_model="import.data"
+            res_model="import.selected.data"
             binding_model="hydrofarm.outputs"
             view_mode="form"
             target="new"
