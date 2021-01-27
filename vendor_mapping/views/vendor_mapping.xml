@@ -36,13 +36,5 @@
             <field name="view_id" ref="vendor_mapping_list_view"/>
         </record>
 
-        <menuitem  name="Vendor Mapping"
-                   id="menu_vendor_mapping"
-                   parent="sale.menu_sale_config"/>
-        <menuitem   name="Vendor Mapping"
-                    id="menu_vendor_mapping_child"
-                    action="vendor_mapping_action_form"
-                    parent="menu_vendor_mapping" sequence="1" />
-
     </data>
 </odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+<!--        <record id="vendor_hydrofarm_demo" model="res.partner">-->
+<!--              <field name="name">Hydrofarm</field>-->
+<!--              <field name="is_api_vendor">1</field>-->
+<!--        </record>-->
+
+        <record id="res_partner_hydrofarm" model="res.partner">
+            <field name="name">Hydrofarm</field>
+            <field name="is_api_vendor">1</field>
+        </record>
+
+<!--        <record id="res_partner_99" model="res.partner">-->
+<!--            <field name="name">Hydrofarm</field>-->
+<!--            <field eval="[(6, 0, [ref('res_partner_category_14'), ref('res_partner_category_12')])]" name="category_id"/>-->
+<!--            <field name="is_company">1</field>-->
+<!--            <field name="street">1839 Arbor Way</field>-->
+<!--            <field name="city">Turlock</field>-->
+<!--            <field name="state_id" ref='state_us_5'/>-->
+<!--            <field name="zip">95380</field>-->
+<!--            <field name="country_id" ref="base.us"/>-->
+<!--            <field name="email">wood.corner26@example.com</field>-->
+<!--            <field name="phone">(623)-853-7197</field>-->
+<!--            <field name="website">http://www.wood-corner.com</field>-->
+<!--        </record>-->
+
+        <record id="vendor_mapping_demo1" model="vendor.mapping">
+          <field name="vendor_api_ref">name</field>
+          <field name="vendor" ref='res_partner_hydrofarm'/>
+          <field name="odoo_api_model_ref" ref="product.model_product_product"/>
+          <field name="odoo_api_field_ref" ref="product.field_product_product__name"/>
+        </record>
+
+        <record id="vendor_mapping_demo2" model="vendor.mapping">
+          <field name="vendor_api_ref">sku</field>
+          <field name="vendor" eval="ref('res_partner_hydrofarm')"/>
+          <field name="odoo_api_model_ref" eval="ref('product.model_product_product')"/>
+          <field name="odoo_api_field_ref" eval="ref('product.field_product_product__default_code')"/>
+        </record>
+
+        <record id="vendor_mapping_demo3" model="vendor.mapping">
+          <field name="vendor_api_ref">description</field>
+          <field name="vendor" eval="ref('res_partner_hydrofarm')"/>
+          <field name="odoo_api_model_ref" eval="ref('product.model_product_product')"/>
+          <field name="odoo_api_field_ref" eval="ref('product.field_product_product__description')"/>
+        </record>
+
+        <record id="vendor_mapping_demo4" model="vendor.mapping">
+          <field name="vendor_api_ref">categoryid</field>
+          <field name="vendor" eval="ref('res_partner_hydrofarm')"/>
+          <field name="odoo_api_model_ref" eval="ref('product.model_product_product')"/>
+          <field name="odoo_api_field_ref" eval="ref('product.field_product_product__categ_id')"/>
+        </record>
+
+        <record id="vendor_mapping_demo5" model="vendor.mapping">
+          <field name="vendor_api_ref">image</field>
+          <field name="vendor" eval="ref('res_partner_hydrofarm')"/>
+          <field name="odoo_api_model_ref" eval="ref('product.model_product_product')"/>
+          <field name="odoo_api_field_ref" eval="ref('product.field_product_product__image_1920')"/>
+        </record>
+
+        <record id="vendor_mapping_demo6" model="vendor.mapping">
+          <field name="vendor_api_ref">retailPrice</field>
+          <field name="vendor" eval="ref('res_partner_hydrofarm')"/>
+          <field name="odoo_api_model_ref" eval="ref('product.model_product_product')"/>
+          <field name="odoo_api_field_ref" eval="ref('product.field_product_product__lst_price')"/>
+        </record>
+
+        <record id="vendor_mapping_demo7" model="vendor.mapping">
+          <field name="vendor_api_ref">volume</field>
+          <field name="vendor" eval="ref('res_partner_hydrofarm')"/>
+          <field name="odoo_api_model_ref" eval="ref('product.model_product_product')"/>
+          <field name="odoo_api_field_ref" eval="ref('product.field_product_product__volume')"/>
+        </record>
+
+    </data>
+</odoo>
