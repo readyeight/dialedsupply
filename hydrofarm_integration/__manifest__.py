@@ -19,6 +19,7 @@
 
         # 'wizard/fetch_data.xml',
         'wizard/import_wizard.xml',
+
     ],
     'installable': True,
     'auto_install': False,
