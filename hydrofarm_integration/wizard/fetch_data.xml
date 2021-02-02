@@ -32,8 +32,8 @@
             <field name="target">new</field>
         </record>
 
-         <menuitem id="menu_integration_distributor_wizard" name="Fetch Catalog"
-                  action="action_view_fetch_data"
-                  parent="menu_integration" sequence="2"/>
+<!--         <menuitem id="menu_integration_distributor_wizard" name="Fetch Catalog"-->
+<!--                  action="action_view_fetch_data"-->
+<!--                  parent="menu_integration" sequence="2"/>-->
 
 </odoo>
