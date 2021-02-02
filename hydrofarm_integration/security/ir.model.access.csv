@@ -1,15 +1,14 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hydrofarm.vendor,access.hydrofarm.vendor,model_hydrofarm_vendor,,1,1,1,1
+vendor_mapping.access_website_vendor_mapping,Vendor Mapping,vendor_mapping.model_vendor_mapping,group_product_api_user,1,1,1,1
 
-access_fetch_data,fetch.data,model_fetch_data,,1,1,1,1
-access_import_data,import.data,model_import_data,,1,1,1,1
+access_hydrofarm.vendor,access.hydrofarm.vendor,model_hydrofarm_vendor,group_product_api_user,1,1,1,1
 
-
-access_hydrofarm_outputs,hydrofarm.outputs,model_hydrofarm_outputs,,1,1,1,1
+access_import_data,import.data,model_import_data,group_product_api_user,1,1,1,1
 
 
-access_hydrofarm_categories,hydrofarm.categories,model_hydrofarm_categories,,1,1,1,1
-access_hydro_categorie,hydro.categorie,model_hydro_categorie,,1,1,1,1
-access_your_price,your.price,model_your_price,,1,1,1,1
+access_hydrofarm_outputs,hydrofarm.outputs,model_hydrofarm_outputs,group_product_api_user,1,1,1,1
 
-access_import_selected_data,import.selected.data,model_import_selected_data,,1,1,1,1
+access_hydro_category,hydro.category,model_hydro_category,group_product_api_user,1,1,1,1
+access_your_price,your.price,model_your_price,group_product_api_user,1,1,1,1
+
+access_import_selected_data,import.selected.data,model_import_selected_data,group_product_api_user,1,1,1,1

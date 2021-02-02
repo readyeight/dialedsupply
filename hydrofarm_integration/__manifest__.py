@@ -7,15 +7,19 @@
     'description': 'HydroFarm integration',
     'author': "Silverdaletech",
     'category': 'Product',
-    'depends': ['base', 'sale','vendor_mapping'],
+    'depends': ['base', 'sale', 'vendor_mapping'],
     'data': [
+
+        'data/cron_data.xml',
+
+        'security/hydrofarm_product_security.xml',
         'security/ir.model.access.csv',
+
         'views/hydrofarm_vendor_view.xml',
-        'views/categories_view.xml',
-        'wizard/fetch_data.xml',
+
+        # 'wizard/fetch_data.xml',
         'wizard/import_wizard.xml',
     ],
-
     'installable': True,
     'auto_install': False,
     'application': True,

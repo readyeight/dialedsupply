@@ -36,7 +36,7 @@ class FetchData(models.TransientModel):
             'grant_type': "client_credentials"
         }
 
-        # print(data,"data")
+        self.fetch_hydro_categories()
         try:
 
 
@@ -168,6 +168,7 @@ class FetchData(models.TransientModel):
             'client_secret': hydrofarm.client_secret,
             'grant_type': "client_credentials"
         }
+        self.fetch_hydro_categories()
 
         try:
 
@@ -269,6 +270,65 @@ class FetchData(models.TransientModel):
 
             else:
                 raise ValidationError(_('Error in product Search!'))
+
+        except requests.HTTPError:
+            raise ValidationError(_('The validation digit is not valid for "%s"'))
+
+
+
+    def fetch_hydro_categories(self):
+        hydrofarm = self.env['hydrofarm.vendor'].search([('active', '=', True)], limit=1)
+        request_url = hydrofarm.access_token_url
+        print(request_url)
+        headers = {"Content-type": "application/x-www-form-urlencoded"}
+        data = {
+            'scope': "hydrofarmApi read write",
+            'client_id': hydrofarm.client_id,
+            'client_secret': hydrofarm.client_secret,
+            'grant_type': "client_credentials"
+        }
+        try:
+            req = requests.post(request_url, data=data, headers=headers, timeout=10000)
+            if not req:
+                raise ValidationError(_('Data is can not be fetched.'))
+
+            print('req1',req)
+            req.raise_for_status()
+            parents_dict = req.json()
+            access_token = parents_dict.get('access_token')
+            print(access_token,'access_token')
+            url = hydrofarm.url + "/api/categories/getcategories"
+            req_headers = {
+                'Content-Type': "application/json",
+                'Authorization': "Bearer " + access_token,
+            }
+            request_data = {
+                # "keyword": self.keyword,
+            }
+            data = json.dumps(request_data)
+            print(data,'dumps data')
+            print(url,'url')
+
+            req = requests.get(url, data=data, headers=req_headers, timeout =10000)
+            if not req:
+                raise ValidationError(_('Connection failed! Data can not be fetched.'))
+            print(req)
+            req.raise_for_status()
+            products_dict = req.json()
+            print(products_dict,'products_dict')
+            for prd in products_dict:
+                hydrofarm_categ = self.env['hydro.category'].search([('categ_id', '=', str(prd.get('id')))])
+                hydrofarm_categ.unlink()
+                if not hydrofarm_categ:
+                    values = {
+                        "categ_id": str(prd.get('id')),
+                        "name": prd.get('name'),
+                        "shortName": prd.get('shortName'),
+                        "connection_id": hydrofarm.id
+
+                    }
+                    category_lines = self.env['hydro.category'].create(values)
+                    print(category_lines,category_lines.name)
 
         except requests.HTTPError:
             raise ValidationError(_('The validation digit is not valid for "%s"'))

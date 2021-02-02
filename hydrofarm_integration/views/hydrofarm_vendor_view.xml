@@ -19,7 +19,7 @@
                 <form string="Vendors">
                     <header>
                         <button type="object" class="oe_highlight" string="Test Connection" name="test_connection"/>
-                        <button type="object" class="oe_highlight" string="Fetch Products" name="get_products"/>
+                        <button type="object" class="oe_highlight" string="Fetch All Products" name="get_products"/>
                     </header>
                     <sheet>
                         <group>
@@ -35,54 +35,94 @@
                             <page name="authorization" string="General Authorisation">
                                 <group>
                                     <group>
-                                       <field name="url"/>
-                                       <field name="client_id"/>
-                                       <field name="client_secret"/>
-                                       <field name="access_token_url"/>
+                                        <field name="url"/>
+                                        <field name="client_id"/>
+                                        <field name="client_secret"/>
+                                        <field name="access_token_url"/>
                                     </group>
                                     <group>
                                         <field name="active"/>
-
+                                        <field name="product_url"/>
+                                        <field name="categories_url"/>
                                     </group>
                                 </group>
                             </page>
+                            <page name="schedule_activity " string="Schedule Activity ">
+                                <group>
+                                    <group>
+                                        <field name="cron_id"/>
+                                        <label for="interval_number" string="Execute Every"/>
+                                        <div>
+                                            <field name="interval_number" class="oe_inline"/>
+                                            <field name="interval_type" class="oe_inline"/>
+                                        </div>
+                                        <field name="run_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="cron_active" string="Active"/>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Categories">
+                                <field name="categories_ids" readonly="1">
+                                    <tree>
+                                        <field name="categ_id"/>
+                                        <field name="name"/>
+                                        <field name="shortName"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Outputs">
+                                <field name="product_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="sku"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Products Created">
+                                <field name="product_ids2" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="sku"/>
+                                        <field name="product_id" string="Odoo Product"/>
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
                     </sheet>
-<!--                    <div class="oe_chatter">-->
-<!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
-<!--                        <field name="activity_ids" widget="mail_activity"/>-->
-<!--                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>-->
-<!--                    </div>-->
                 </form>
-
             </field>
         </record>
 
 
-         <record model="ir.actions.act_window" id="action_hydrofarm_vendor">
+        <record model="ir.actions.act_window" id="action_hydrofarm_vendor">
             <field name="name">Hydrofarm</field>
             <field name="res_model">hydrofarm.vendor</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
             <field name="help" type="html">
-                  <p class="o_view_nocontent_smiling_face">
-                  </p><p>
-                  </p>
-             </field>
+                <p class="o_view_nocontent_smiling_face">
+                </p>
+                <p>
+                </p>
+            </field>
         </record>
 
-        <menuitem id="menu_integration" name="HydroFarm"
+        <menuitem id="menu_integration" name="Products API"
+                  groups="group_product_api_user"
                   parent="sale.menu_sale_config" sequence="101"/>
 
         <!-- Integration sub-menus -->
-        <menuitem id="menu_integration_distributor" name="HydroFarm"
+        <menuitem id="menu_integration_distributor" name="Connection"
                   action="action_hydrofarm_vendor"
+                  groups="group_product_api_user"
                   parent="menu_integration" sequence="1"/>
 
 
-
-<!--        hydroform outputs views-->
+        <!--        hydroform outputs views-->
         <record model="ir.ui.view" id="hydrofarm_outputs_tree_view">
             <field name="name">hydrofarm.outputs.tree</field>
             <field name="model">hydrofarm.outputs</field>
@@ -104,6 +144,7 @@
                             <group>
                                 <field name="name"/>
                                 <field name="sku"/>
+                                <field name="product_id"/>
                             </group>
                             <group>
                                 <field name="recid"/>
@@ -151,7 +192,7 @@
                                 <field name="height"/>
                                 <field name="width"/>
                                 <field name="depth"/>
-<!--                                <field name="wholesalePrice"/>-->
+                                <!--                                <field name="wholesalePrice"/>-->
                                 <field name="dimensions"/>
                                 <field name="volume"/>
                             </group>
@@ -171,41 +212,47 @@
                             </group>
                         </group>
                     </sheet>
-<!--                    <div class="oe_chatter">-->
-<!--                        <field name="activity_ids" widget="mail_activity"/>-->
-<!--                        <field name="message_ids" widget="mail_thread"/>-->
-<!--                    </div>-->
+                    <!--                    <div class="oe_chatter">-->
+                    <!--                        <field name="activity_ids" widget="mail_activity"/>-->
+                    <!--                        <field name="message_ids" widget="mail_thread"/>-->
+                    <!--                    </div>-->
                 </form>
 
             </field>
         </record>
 
 
-         <record model="ir.actions.act_window" id="action_hydrofarm_outputs">
+        <record model="ir.actions.act_window" id="action_hydrofarm_outputs">
             <field name="name">Hydrofarm Outputs</field>
             <field name="res_model">hydrofarm.outputs</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
             <field name="help" type="html">
-                  <p class="o_view_nocontent_smiling_face">
-                  </p><p>
-                  </p>
-             </field>
+                <p class="o_view_nocontent_smiling_face">
+                </p>
+                <p>
+                </p>
+            </field>
         </record>
 
-        <menuitem id="menu_integration_distributor_outputs" name="HydroFarm Outputs"
+        <menuitem id="menu_integration_distributor_outputs" name="Outputs"
                   action="action_hydrofarm_outputs"
                   parent="menu_integration" sequence="1"/>
 
+        <menuitem name="Mapping"
+                  id="menu_vendor_mapping_child"
+                  action="vendor_mapping.vendor_mapping_action_form"
+                  parent="menu_integration" sequence="10"/>
+
         <act_window
-            id="act_applicants_reject"
-            name="Import Products"
-            res_model="import.selected.data"
-            binding_model="hydrofarm.outputs"
-            view_mode="form"
-            target="new"
-            context="{
+                id="act_applicants_reject"
+                name="Import Products"
+                res_model="import.selected.data"
+                binding_model="hydrofarm.outputs"
+                view_mode="form"
+                target="new"
+                context="{
                 'default_fetched_ids': active_ids,
             }"
         />

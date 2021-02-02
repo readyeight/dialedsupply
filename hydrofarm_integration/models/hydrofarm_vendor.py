@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import pdb
 
-from odoo import models, fields, api,_
+from odoo import models, fields, api, _
 from odoo import http
 from odoo.http import request
 import requests
 import logging
+
 logger = logging.getLogger(__name__)
 from xml.etree import ElementTree as ET
 import json
@@ -28,7 +29,44 @@ class HydroFarmApi(models.Model):
     access_token_url = fields.Char(string='Access Token Url', required=True)
     active = fields.Boolean(string="Active", default=True)
     message = fields.Char(string='Message')
+    categories_ids = fields.One2many('hydro.category', 'connection_id', ondelete='cascade')
+    product_ids = fields.One2many('hydrofarm.outputs', 'connection_id', ondelete='cascade')
+    product_ids2 = fields.One2many('hydrofarm.outputs', 'connection_id', ondelete='cascade',
+                                   domain=[('product_id', '!=', False)])
+
     # tested_date = fields.Datetime(string='Last Tested Date')
+    product_url = fields.Char(string='Product Url', required=True)
+    categories_url = fields.Char(string='Categories Url', required=True)
+
+    def _get_product_api(self):
+        product_api = self.env['ir.cron'].search([('name', '=', 'Product API: Fetch All product')])
+        if product_api:
+            return product_api.id
+        return True
+
+    cron_id = fields.Many2one('ir.cron', string='Schedule Activity', default=_get_product_api)
+    interval_number = fields.Integer()
+    interval_type = fields.Selection(string='Interval_type', selection=[('minutes', 'Minutes'),
+                                                                        ('hours', 'Hours'), ('days', 'Days'),
+                                                                        ('weeks', 'Weeks'), ('months', 'Months'), ],
+                                     default="hours")
+    run_date = fields.Datetime(string='Run Date', )
+    cron_active = fields.Boolean(sting="Active", )
+
+    @api.onchange('interval_number', 'interval_type', 'run_date', 'cron_active')
+    def change_schedule_activity(self):
+        if self.cron_id:
+            if self.interval_number:
+                self.cron_id.interval_number = self.interval_number
+            if self.interval_type:
+                self.cron_id.interval_type = self.interval_type
+            if self.run_date:
+                self.cron_id.nextcall = self.run_date
+            self.cron_id.active = self.cron_active
+
+    def cron_product_api_update(self):
+        for rec in self.search([('cron_id', '!=', False), ('active', '=', True)]):
+            rec.get_products()
 
     def test_connection(self):
         self.ensure_one()
@@ -50,9 +88,11 @@ class HydroFarmApi(models.Model):
     def get_products(self):
         response = self.test_connection()
 
+        self.fetch_hydro_categories()
+
         parents_dict = response.json()
         access_token = parents_dict.get('access_token')
-        url = self.url + "/api/products/getProducts"
+        url = self.url + self.product_url
         req_headers = {
             'Content-Type': "application/json",
             'Authorization': "Bearer " + access_token,
@@ -70,32 +110,31 @@ class HydroFarmApi(models.Model):
             print(products_dict)
             print(len(products_dict))
 
-
             product_out = []
             for prd in products_dict:
                 # hydrofarm = self.env['hydrofarm.outputs'].search([('recid', '=', prd.get('recid'))])
                 # if not hydrofarm:
                 retailPrice = prd.get('price').get('retailPrice')
                 wholesalePrice = prd.get('price').get('wholesalePrice')
-                print(prd.get('sku'),prd.get('name'))
+                print(prd.get('sku'), prd.get('name'))
                 print(wholesalePrice)
                 price_list = []
                 if wholesalePrice:
                     for price_line in wholesalePrice:
                         values = {
-                            'yourprice':str(price_line.get('yourPrice')),
+                            'yourprice': str(price_line.get('yourPrice')),
                             'price': str(price_line.get('price')),
                             'qtyStart': str(price_line.get('qtyStart')),
                             'qtyEnd': str(price_line.get('qtyEnd'))
 
                         }
-                        price_list.append([0,0,values])
+                        price_list.append([0, 0, values])
                 # height = False
                 # width = False
                 # depth = False
 
-
                 values = {
+                    "connection_id": self.id,
                     "recid": prd.get('recid'),
                     "sku": prd.get('sku'),
                     "name": prd.get('name'),
@@ -127,7 +166,7 @@ class HydroFarmApi(models.Model):
                     # "saleenddate": prd.get('saleenddate'),
                     # "modifiedon": prd.get('modifiedon'),
                     # "createdon": prd.get('createdon'),
-                    "image":False,
+                    "image": False,
                     # "image":image,
                     # "height": prd.get('dimensions')[0].get('height'),
                     # "width": prd.get('dimensions')[0].get('width'),
@@ -149,13 +188,14 @@ class HydroFarmApi(models.Model):
                     values['height'] = prd.get('dimensions')[0].get('height'),
                     values['width'] = prd.get('dimensions')[0].get('width'),
                     values['depth'] = prd.get('dimensions')[0].get('depth'),
-                    values['volume'] = float(prd.get('dimensions')[0].get('height')) *float(prd.get('dimensions')[0].get('width')) *float(prd.get('dimensions')[0].get('depth'))
+                    values['volume'] = float(prd.get('dimensions')[0].get('height')) * float(
+                        prd.get('dimensions')[0].get('width')) * float(prd.get('dimensions')[0].get('depth'))
                 # print(prd.get('recid'))
                 # print(prd.get('images')[0].get('url') or False)
                 product_out_put_ids = self.env['hydrofarm.outputs'].create(values)
                 product_out.append(product_out_put_ids.id)
 
-            print(product_out,'product_out')
+            print(product_out, 'product_out')
             return {
                 'domain': [('id', 'in', product_out)],
                 'name': _('Hydrofarm Products'),
@@ -178,7 +218,7 @@ class HydroFarmApi(models.Model):
         # req.raise_for_status()
         parents_dict = response.json()
         access_token = parents_dict.get('access_token')
-        url = self.url + "/api/categories/getcategories"
+        url = self.url + self.categories_url
         req_headers = {
             'Content-Type': "application/json",
             'Authorization': "Bearer " + access_token,
@@ -194,8 +234,59 @@ class HydroFarmApi(models.Model):
         else:
             raise ValidationError(_('Error in Categories Search!'))
 
+    def fetch_hydro_categories(self):
+        hydrofarm = self.env['hydrofarm.vendor'].search([('active', '=', True)], limit=1)
+        request_url = hydrofarm.access_token_url
+        print(request_url)
+        headers = {"Content-type": "application/x-www-form-urlencoded"}
+        data = {
+            'scope': "hydrofarmApi read write",
+            'client_id': hydrofarm.client_id,
+            'client_secret': hydrofarm.client_secret,
+            'grant_type': "client_credentials"
+        }
+        try:
+            req = requests.post(request_url, data=data, headers=headers, timeout=10000)
+            if not req:
+                raise ValidationError(_('Data is can not be fetched.'))
 
+            print('req1', req)
+            req.raise_for_status()
+            parents_dict = req.json()
+            access_token = parents_dict.get('access_token')
+            print(access_token, 'access_token')
+            url = hydrofarm.url + "/api/categories/getcategories"
+            req_headers = {
+                'Content-Type': "application/json",
+                'Authorization': "Bearer " + access_token,
+            }
+            request_data = {
+                # "keyword": self.keyword,
+            }
+            data = json.dumps(request_data)
+            print(data, 'dumps data')
+            print(url, 'url')
 
+            req = requests.get(url, data=data, headers=req_headers, timeout=10000)
+            if not req:
+                raise ValidationError(_('Connection failed! Data can not be fetched.'))
+            print(req)
+            req.raise_for_status()
+            products_dict = req.json()
+            print(products_dict, 'products_dict')
+            for prd in products_dict:
+                hydrofarm_categ = self.env['hydro.category'].search([('categ_id', '=', str(prd.get('id')))])
+                hydrofarm_categ.unlink()
+                if not hydrofarm_categ:
+                    values = {
+                        "categ_id": str(prd.get('id')),
+                        "name": prd.get('name'),
+                        "shortName": prd.get('shortName'),
+                        "connection_id": self.id
 
+                    }
+                    category_lines = self.env['hydro.category'].create(values)
+                    print(category_lines, category_lines.name)
 
-
+        except requests.HTTPError:
+            raise ValidationError(_('The validation digit is not valid for "%s"'))
