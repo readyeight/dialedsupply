@@ -14,7 +14,6 @@ from odoo.tools import float_compare, float_round
 from odoo.exceptions import UserError, ValidationError
 import base64
 
-
 class HydroFarmApi(models.Model):
     _name = "hydrofarm.vendor"
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -38,13 +37,13 @@ class HydroFarmApi(models.Model):
     product_url = fields.Char(string='Product Url', required=True)
     categories_url = fields.Char(string='Categories Url', required=True)
 
-    def _get_product_api(self):
-        product_api = self.env['ir.cron'].search([('name', '=', 'Product API: Fetch All product')])
-        if product_api:
-            return product_api.id
-        return True
+    # def _get_product_api(self):
+    #     product_api = self.env['ir.cron'].search([('name', '=', 'Product API: Fetch All product')])
+    #     if product_api:
+    #         return product_api.id
+    #     return True
 
-    cron_id = fields.Many2one('ir.cron', string='Schedule Activity', default=_get_product_api)
+    cron_id = fields.Many2one('ir.cron', string='Schedule Activity', readonly=1)
     interval_number = fields.Integer()
     interval_type = fields.Selection(string='Interval_type', selection=[('minutes', 'Minutes'),
                                                                         ('hours', 'Hours'), ('days', 'Days'),
@@ -52,6 +51,25 @@ class HydroFarmApi(models.Model):
                                      default="hours")
     run_date = fields.Datetime(string='Run Date', )
     cron_active = fields.Boolean(sting="Active", )
+
+    @api.model
+    def create(self, vals):
+        res = super(HydroFarmApi, self).create(vals)
+        model_id = self.env['ir.model'].search([('model', '=', self._name)])
+        cron_values = {
+            'name': "Cron get products " + (res.name or ""),
+            'model_id': model_id and model_id.id,
+            'state': 'code',
+            'code': 'model.cron_product_api_update(' + str(res.id) + ')',
+            'interval_number': res.interval_number,
+            'interval_type': res.interval_type,
+            'numbercall': -1,
+            'active': res.cron_active,
+        }
+        cron = self.env['ir.cron'].sudo().create(cron_values)
+        if cron:
+            res.cron_id = cron.id
+        return res
 
     @api.onchange('interval_number', 'interval_type', 'run_date', 'cron_active')
     def change_schedule_activity(self):
@@ -64,9 +82,10 @@ class HydroFarmApi(models.Model):
                 self.cron_id.nextcall = self.run_date
             self.cron_id.active = self.cron_active
 
-    def cron_product_api_update(self):
-        for rec in self.search([('cron_id', '!=', False), ('active', '=', True)]):
+    def cron_product_api_update(self,id):
+        for rec in self.search([('id','=',int(id) )]):
             rec.get_products()
+
 
     def test_connection(self):
         self.ensure_one()
