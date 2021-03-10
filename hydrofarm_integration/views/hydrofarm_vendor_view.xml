@@ -133,6 +133,17 @@
                 </tree>
             </field>
         </record>
+
+        <record id="hydro_product_search_filter" model="ir.ui.view">
+            <field name="name">hydrofarm.outputs.filter</field>
+            <field name="model">hydrofarm.outputs</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <search string="Search Sales Order">
+                    <filter string="No Products Created" domain="[('product_id', '=',False)]" name="my_product_filter"/>
+                    </search>
+                </field>
+                </record>
         <!-- Form view-->
         <record id="hydrofarm_outputs_form_view" model="ir.ui.view">
             <field name="name">hydrofarm.outputs.form</field>
@@ -226,8 +237,10 @@
             <field name="name">Hydrofarm Outputs</field>
             <field name="res_model">hydrofarm.outputs</field>
             <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hydro_product_search_filter"/>
+            
             <field name="domain">[]</field>
-            <field name="context">{}</field>
+            <field name="context">{"search_default_my_product_filter":1}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                 </p>
