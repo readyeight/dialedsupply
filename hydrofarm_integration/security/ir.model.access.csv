@@ -3,9 +3,6 @@ vendor_mapping.access_website_vendor_mapping,Vendor Mapping,vendor_mapping.model
 
 access_hydrofarm.vendor,access.hydrofarm.vendor,model_hydrofarm_vendor,group_product_api_user,1,1,1,1
 
-access_import_data,import.data,model_import_data,group_product_api_user,1,1,1,1
-
-
 access_hydrofarm_outputs,hydrofarm.outputs,model_hydrofarm_outputs,group_product_api_user,1,1,1,1
 
 access_hydro_category,hydro.category,model_hydro_category,group_product_api_user,1,1,1,1
