@@ -17,7 +17,6 @@
 
         'views/hydrofarm_vendor_view.xml',
 
-        # 'wizard/fetch_data.xml',
         'wizard/import_wizard.xml',
 
     ],

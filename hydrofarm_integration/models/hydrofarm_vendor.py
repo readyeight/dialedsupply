@@ -254,14 +254,13 @@ class HydroFarmApi(models.Model):
             raise ValidationError(_('Error in Categories Search!'))
 
     def fetch_hydro_categories(self):
-        hydrofarm = self.env['hydrofarm.vendor'].search([('active', '=', True)], limit=1)
-        request_url = hydrofarm.access_token_url
+        request_url = self.access_token_url
         print(request_url)
         headers = {"Content-type": "application/x-www-form-urlencoded"}
         data = {
             'scope': "hydrofarmApi read write",
-            'client_id': hydrofarm.client_id,
-            'client_secret': hydrofarm.client_secret,
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
             'grant_type': "client_credentials"
         }
         try:
@@ -274,7 +273,7 @@ class HydroFarmApi(models.Model):
             parents_dict = req.json()
             access_token = parents_dict.get('access_token')
             print(access_token, 'access_token')
-            url = hydrofarm.url + "/api/categories/getcategories"
+            url = self.url + "/api/categories/getcategories"
             req_headers = {
                 'Content-Type': "application/json",
                 'Authorization': "Bearer " + access_token,

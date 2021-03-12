@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_import_data" model="ir.ui.view">
-        <field name="name">import.data</field>
-        <field name="model">import.data</field>
-        <field name="arch" type="xml">
-            <form string="Import Data">
-                <group colspan="4">
-                    <separator string="Outputs" colspan="4"/>
-                    <newline/>
-                    <field name="fetched_ids" nolabel="1">
-                        <tree editable="bottom">
-                            <!--                                <field name="check_box"/>-->
-                            <field name="name" readonly="1"/>
-                            <field name="sku" readonly="1"/>
-                        </tree>
-                    </field>
-                </group>
-                <footer>
-                    <button icon="fa-cogs" string="Create Products" name="import_data" type="object" class="oe_highlight"/>
-                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record>
 
     <record id="view_import_selected_data" model="ir.ui.view">
         <field name="name">import.selected.data</field>
