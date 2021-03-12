@@ -131,87 +131,87 @@ class HydroFarmApi(models.Model):
 
             product_out = []
             for prd in products_dict:
-                # hydrofarm = self.env['hydrofarm.outputs'].search([('recid', '=', prd.get('recid'))])
-                # if not hydrofarm:
-                retailPrice = prd.get('price').get('retailPrice')
-                wholesalePrice = prd.get('price').get('wholesalePrice')
-                print(prd.get('sku'), prd.get('name'))
-                print(wholesalePrice)
-                price_list = []
-                if wholesalePrice:
-                    for price_line in wholesalePrice:
-                        values = {
-                            'yourprice': str(price_line.get('yourPrice')),
-                            'price': str(price_line.get('price')),
-                            'qtyStart': str(price_line.get('qtyStart')),
-                            'qtyEnd': str(price_line.get('qtyEnd'))
+                product_out_put_ids = self.env['hydrofarm.outputs'].search([('recid', '=', prd.get('recid')),('connection_id', '=', self.id)])
+                if not product_out_put_ids:
+                    retailPrice = prd.get('price').get('retailPrice')
+                    wholesalePrice = prd.get('price').get('wholesalePrice')
+                    print(prd.get('sku'), prd.get('name'))
+                    print(wholesalePrice)
+                    price_list = []
+                    if wholesalePrice:
+                        for price_line in wholesalePrice:
+                            values = {
+                                'yourprice': str(price_line.get('yourPrice')),
+                                'price': str(price_line.get('price')),
+                                'qtyStart': str(price_line.get('qtyStart')),
+                                'qtyEnd': str(price_line.get('qtyEnd'))
 
-                        }
-                        price_list.append([0, 0, values])
-                # height = False
-                # width = False
-                # depth = False
+                            }
+                            price_list.append([0, 0, values])
+                    # height = False
+                    # width = False
+                    # depth = False
 
-                values = {
-                    "connection_id": self.id,
-                    "recid": prd.get('recid'),
-                    "sku": prd.get('sku'),
-                    "name": prd.get('name'),
-                    "yourPrice_ids": price_list,
-                    "retailPrice": retailPrice,
-                    "namealias": prd.get('namealias'),
-                    "categoryid": prd.get('categoryid'),
-                    "description": prd.get('description'),
-                    # "webdescription": prd.get('webdescription'),
-                    "unitsize": prd.get('unitsize'),
-                    "model": prd.get('model'),
-                    # "isdefault": prd.get('isdefault'),
-                    # "isdiscontinued": prd.get('isdiscontinued'),
-                    # "isspecialorder": prd.get('isspecialorder'),
-                    # "isbuildtoorder": prd.get('isbuildtoorder'),
-                    # "isclearance": prd.get('isclearance'),
-                    # "issale": prd.get('issale'),
-                    # "ishazmat": prd.get('ishazmat'),
-                    # "freightrestricted": prd.get('freightrestricted'),
-                    # "freightquoterequired": prd.get('freightquoterequired'),
-                    # "defaultuom": prd.get('defaultuom'),
-                    # "defaultuomrecid": prd.get('defaultuomrecid'),
-                    # "defaultimageid": prd.get('defaultimageid'),
-                    # "mixmatchgrp": prd.get('mixmatchgrp'),
-                    # "warranty": prd.get('warranty'),
-                    # "trackingdimensiongroup": prd.get('trackingdimensiongroup'),
-                    # "launchdate": prd.get('launchdate'),
-                    # "salestartdate": prd.get('salestartdate'),
-                    # "saleenddate": prd.get('saleenddate'),
-                    # "modifiedon": prd.get('modifiedon'),
-                    # "createdon": prd.get('createdon'),
-                    "image": False,
-                    # "image":image,
-                    # "height": prd.get('dimensions')[0].get('height'),
-                    # "width": prd.get('dimensions')[0].get('width'),
-                    # "depth": prd.get('dimensions')[0].get('depth'),
-                    # "volume" : float(prd.get('dimensions')[0].get('height')) *
-                    #                                float(prd.get('dimensions')[0].get('width')) *
-                    #                                float(prd.get('dimensions')[0].get('depth'))
-                }
+                    values = {
+                        "connection_id": self.id,
+                        "recid": prd.get('recid'),
+                        "sku": prd.get('sku'),
+                        "name": prd.get('name'),
+                        "yourPrice_ids": price_list,
+                        "retailPrice": retailPrice,
+                        "namealias": prd.get('namealias'),
+                        "categoryid": prd.get('categoryid'),
+                        "description": prd.get('description'),
+                        # "webdescription": prd.get('webdescription'),
+                        "unitsize": prd.get('unitsize'),
+                        "model": prd.get('model'),
+                        # "isdefault": prd.get('isdefault'),
+                        # "isdiscontinued": prd.get('isdiscontinued'),
+                        # "isspecialorder": prd.get('isspecialorder'),
+                        # "isbuildtoorder": prd.get('isbuildtoorder'),
+                        # "isclearance": prd.get('isclearance'),
+                        # "issale": prd.get('issale'),
+                        # "ishazmat": prd.get('ishazmat'),
+                        # "freightrestricted": prd.get('freightrestricted'),
+                        # "freightquoterequired": prd.get('freightquoterequired'),
+                        # "defaultuom": prd.get('defaultuom'),
+                        # "defaultuomrecid": prd.get('defaultuomrecid'),
+                        # "defaultimageid": prd.get('defaultimageid'),
+                        # "mixmatchgrp": prd.get('mixmatchgrp'),
+                        # "warranty": prd.get('warranty'),
+                        # "trackingdimensiongroup": prd.get('trackingdimensiongroup'),
+                        # "launchdate": prd.get('launchdate'),
+                        # "salestartdate": prd.get('salestartdate'),
+                        # "saleenddate": prd.get('saleenddate'),
+                        # "modifiedon": prd.get('modifiedon'),
+                        # "createdon": prd.get('createdon'),
+                        "image": False,
+                        # "image":image,
+                        # "height": prd.get('dimensions')[0].get('height'),
+                        # "width": prd.get('dimensions')[0].get('width'),
+                        # "depth": prd.get('dimensions')[0].get('depth'),
+                        # "volume" : float(prd.get('dimensions')[0].get('height')) *
+                        #                                float(prd.get('dimensions')[0].get('width')) *
+                        #                                float(prd.get('dimensions')[0].get('depth'))
+                    }
 
-                image_list = prd.get('images')
-                if len(image_list) > 0:
-                    values['image'] = prd.get('images')[0].get('url')
-                    # values['image'] = base64.b64encode(
-                    #     requests.get(
-                    #         prd.get('images')[0].get('url').strip()).content).replace(
-                    #     b'\n', b'')
-                dimensions_list = prd.get('dimensions')
-                if len(dimensions_list) > 0:
-                    values['height'] = prd.get('dimensions')[0].get('height'),
-                    values['width'] = prd.get('dimensions')[0].get('width'),
-                    values['depth'] = prd.get('dimensions')[0].get('depth'),
-                    values['volume'] = float(prd.get('dimensions')[0].get('height')) * float(
-                        prd.get('dimensions')[0].get('width')) * float(prd.get('dimensions')[0].get('depth'))
-                # print(prd.get('recid'))
-                # print(prd.get('images')[0].get('url') or False)
-                product_out_put_ids = self.env['hydrofarm.outputs'].create(values)
+                    image_list = prd.get('images')
+                    if len(image_list) > 0:
+                        values['image'] = prd.get('images')[0].get('url')
+                        # values['image'] = base64.b64encode(
+                        #     requests.get(
+                        #         prd.get('images')[0].get('url').strip()).content).replace(
+                        #     b'\n', b'')
+                    dimensions_list = prd.get('dimensions')
+                    if len(dimensions_list) > 0:
+                        values['height'] = prd.get('dimensions')[0].get('height'),
+                        values['width'] = prd.get('dimensions')[0].get('width'),
+                        values['depth'] = prd.get('dimensions')[0].get('depth'),
+                        values['volume'] = float(prd.get('dimensions')[0].get('height')) * float(
+                            prd.get('dimensions')[0].get('width')) * float(prd.get('dimensions')[0].get('depth'))
+                    # print(prd.get('recid'))
+                    # print(prd.get('images')[0].get('url') or False)
+                    product_out_put_ids = self.env['hydrofarm.outputs'].create(values)
                 product_out.append(product_out_put_ids.id)
 
             print(product_out, 'product_out')
